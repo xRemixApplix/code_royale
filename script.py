@@ -73,6 +73,8 @@ class Challenge :
 #--------------------------------------------------
 ###### CONSTANTES ######
 VIDE = -1
+MINE = 0
+TOUR = 1
 CASERNE = 2
 
 ALLIE = 0
@@ -81,6 +83,7 @@ ENNEMI = 1
 REINE = -1
 CHEVALIER = 0
 ARCHER = 1
+GEANT = 2
 #--------------------------------------------------
 #--------------------------------------------------
 ###### Initialisation ######
@@ -104,6 +107,9 @@ while True:
     challenge.set_po(gold)
     nbKnight = 0
     nbArcher = 0
+    nbTour = 0
+    nbMine = 0
+    tower = {'idTower': -1, 'radius': 2000}
 #--------------------------------------------------
 
     for i in range(challenge.nbSites):
@@ -116,6 +122,13 @@ while True:
                 nbKnight += 1
             elif param_2 == ARCHER :
                 nbArcher +=1
+            if structure_type == TOUR :
+                nbTour += 1
+                if param_2<tower['radius'] :
+                    tower['idTower'] = site_id
+                    tower['radius'] = param_2
+            elif structure_type == MINE :
+                nbMine += 1
 #--------------------------------------------------
 
     num_units = int(input())
@@ -157,11 +170,15 @@ while True:
             listTrain.append(i.id)
 
     # Première ligne : Action de la reine
-    # Seconde ligne : Instructions d'entrainement
-    if nbArcher + nbKnight >= 4 :
-        print("MOVE {} {}".format(startX, startY))
-    elif nbKnight >= nbArcher :
-        print("BUILD {} BARRACKS-ARCHER".format(closestSite['idClosest']))
-    else :
+    if nbKnight >= 1 and nbMine >= 3 :
+        if nbTour < 3 :
+            print("BUILD {} TOWER".format(closestSite['idClosest']))
+        else :
+            print("BUILD {} TOWER".format(tower['idTower']))
+    elif nbMine < 3 :
+        print("BUILD {} MINE".format(closestSite['idClosest']))
+    elif nbKnight < 1 :
         print("BUILD {} BARRACKS-KNIGHT".format(closestSite['idClosest']))
-    print("TRAIN",*listTrain,sep=' ')
+        
+    # Seconde ligne : Instructions d'entrainement
+    print("TRAIN",*listTrain[:challenge.po//80],sep=' ')

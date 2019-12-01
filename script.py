@@ -1,9 +1,9 @@
 """
 
     Auteur: xR3m1x
-    Date : 29 Novembre 2019
-    Version du programme : 1.0
-        Entrainement d'unités pour attaquer basiquement la reine.
+    Date : 01 Decembre 2019
+    Version du programme : Bronze
+        A définir....
 
     But du programme :
         Construire des bâtiments et créer des armées pour détruire la Reine de votre adversaire.
@@ -34,15 +34,15 @@ class Unite(Entite):
 ## Classe représentant les sites (site vierge ou batiment)
 class Site(Entite):
     # Fonction d'initialisation de la classe 'Site'
-    def __init__(self, id, x, y, owner, radius, typeSite, cycleTrain, typeArmy, ignore1, ignore2) :
+    def __init__(self, id, x, y, owner, radius, typeSite, cycleTrain, typeArmy, gold, maxMineProd) :
         self.id = id                    # Identifiant du site
         super().__init__(x, y, owner)
-        self.typeSite = typeSite        # Type du site (-1: Vide, 2: Caserne)
+        self.typeSite = typeSite        # Type du site (-1: Vide, 0: Mine, 1: Tour, 2: Caserne)
         self.radius = radius            # Rayon du site
         self.cycleTrain = cycleTrain    # Tour restant avant fin entrainement en cours
-        self.typeArmy = typeArmy        # Type d'unite produite (-1: Vide, 0: Chevalier, 1: Archer)
-        self.ignore1 = ignore1          # Ignore pour le moment
-        self.ignore2 = ignore2          # Ignore pour le moment
+        self.typeArmy = typeArmy        # Type d'unite produite (-1: Vide, 0: Chevalier, 1: Archer, 2: Geant)
+        self.gold = gold                # Quantité d'or restant à produire par une mine (-1 si inconnue)
+        self.maxMineProd = maxMineProd  # Taux de production maximum d'une mine (-1 si inconnue)
     # Fonction mettant à jour les informations
     def maj_site(self, typeSite, owner, cycleTrain, typeArmy):
         self.typeSite = typeSite
@@ -113,7 +113,7 @@ while True:
 #--------------------------------------------------
 
     for i in range(challenge.nbSites):
-        site_id, ignore_1, ignore_2, structure_type, owner, param_1, param_2 = [int(j) for j in input().split()]
+        site_id, gold, maxMineProd, structure_type, owner, param_1, param_2 = [int(j) for j in input().split()]
 
 #--------------------------------------------------
         challenge.site[site_id].maj_site(structure_type, owner, param_1, param_2)
